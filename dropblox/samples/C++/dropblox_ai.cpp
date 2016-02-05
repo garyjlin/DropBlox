@@ -277,6 +277,18 @@ void Board::remove_rows(Bitmap* new_bitmap) {
   }
 }
 
+int aggregateHeight(Bitmap* state){
+}
+
+int completedLines(Bitmap* state){
+}
+
+int numberOfHoles(Bitmap* state){
+}
+
+int bumpValue(Bitmap* state){
+}
+
 int main(int argc, char** argv) {
   // Construct a JSON Object with the given game state.
   istringstream raw_state(argv[1]);
