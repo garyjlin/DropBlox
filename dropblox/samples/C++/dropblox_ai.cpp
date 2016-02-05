@@ -278,6 +278,20 @@ void Board::remove_rows(Bitmap* new_bitmap) {
   }
 }
 
+vector<string>& convertCommands(Point& translation, int rotation){
+    vector<string> commands;
+    for (int i = 0 ; i < rotate ; ++i){
+        commands.push_back("rotate");
+    }
+    for (int i = 0; i < translation.i ; ++i){
+        commands.push_back("down");
+    }
+    for (int i = 0; i < translation.j ; ++i){
+        commands.push_back("right");
+    }
+    return commands;
+}
+
 int aggregateHeight(Bitmap* state){
     int sum = 0;
     int emptyBlocks;
@@ -371,18 +385,18 @@ float calculateScore(Bitmap* state) {
 
 Bitmap flattenBoard(Bitmap* state, Block* block) {
 	Bitmap new_bitmap;
-	
+
 	for (int i = 0; i < ROWS; i++) {
 		for (int j = 0; j < COLS; j++) {
 			new_bitmap[i][j] = (*state)[i][j];
 		}
 	}
-  
+
 	Point point;
 	for (int i = 0; i < block->size; i++) {
 		point.i = block->center.i + block->translation.i;
 		point.j = block->center.j + block->translation.j;
-		
+
 		if (block->rotation % 2) {
 			point.i += (2 - block->rotation)*block->offsets[i].j;
 			point.j +=  -(2 - block->rotation)*block->offsets[i].i;
@@ -390,12 +404,14 @@ Bitmap flattenBoard(Bitmap* state, Block* block) {
 			point.i += (1 - block->rotation)*block->offsets[i].i;
 			point.j += (1 - block->rotation)*block->offsets[i].j;
 		}
-		
+
 		new_bitmap[point.i][point.j] = 1;
 	}
-	
+
 	return new_bitmap;
 }
+
+
 
 int main(int argc, char** argv) {
   // Construct a JSON Object with the given game state.
