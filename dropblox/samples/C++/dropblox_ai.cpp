@@ -327,6 +327,22 @@ int bumpValue(Bitmap* state) {
 	return bumpSum;
 }
 
+float calculateScore(Bitmap* state) {
+	float a = -0.510066;
+	float b = 0.760666;
+	float c = -0.35663;
+	float d = -0.184483;
+	
+	float score = 0;
+	
+	score += a * aggregateHeight(state);
+	score += b * completedLines(state);
+	score += c * numberOfHoles(state);
+	score += d * bumpValue(state);
+	
+	return score;
+}
+
 int main(int argc, char** argv) {
   // Construct a JSON Object with the given game state.
   istringstream raw_state(argv[1]);
