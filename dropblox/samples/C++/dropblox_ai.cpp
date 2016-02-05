@@ -279,33 +279,59 @@ void Board::remove_rows(Bitmap* new_bitmap) {
 }
 
 int aggregateHeight(Bitmap* state){
+    int sum = 0;
+    int emptyBlocks;
+    for (int j = 0; j < COLS; ++j){
+        int i = 9;
+        emptyBlocks = 0;
+        while(!state[i][j] && i < ROWS){
+            emptyBlocks++;
+            i++;
+        }
+        sum += ROWS - 9 - emptyBlocks;
+    }
+    return sum;
 }
 
 int completedLines(Bitmap* state){
 	int completedLines = 0;
-	
+
 	for (int row = 0; row < ROWS; row++) {
 		bool complete = true;
-		
+
 		for (int col = 0; col < COLS; col++) {
 			if ((*state)[row][col] == 0) {
 				complete = false;
 				break;
 			}
 		}
-		
+
 		if (complete) completedLines++;
 	}
-	
+
 	return completedLines;
 }
 
 int numberOfHoles(Bitmap* state){
+    int holes = 0;
+    for (int i = 9 ; i < ROWS ; i++){
+        for (int j = 0; j < COLS ; j++){
+            if (!(*state)[i][j]){
+                bool hole = true;
+                if (i+1 > ROWS && (*state)[i+1][j]) hole = false;
+                if (i-1 < 9 && (*state)[i+1][j]) hole = false;
+                if (j+1 > COLS && (*state)[i+1][j]) hole = false;
+                if (j-1 < 0 && (*state)[i+1][j]) hole = false;
+                if (hole) holes++;
+            }
+        }
+    }
+    return holes;
 }
 
 int columnHeight(Bitmap* state, int col) {
 	int height = 0;
-	
+
 	for (int row = ROWS; row >= 0; row--) {
 		if ((*state)[row][col] != 0) {
 			height++;
@@ -313,17 +339,17 @@ int columnHeight(Bitmap* state, int col) {
 			break;
 		}
 	}
-	
+
 	return height;
 }
 
 int bumpValue(Bitmap* state) {
 	int bumpSum = 0;
-	
+
 	for (int col = 0; col < COLS - 1; col++) {
 		bumpSum += abs(columnHeight(state, col) - columnHeight(state, col + 1));
 	}
-	
+
 	return bumpSum;
 }
 
@@ -332,14 +358,14 @@ float calculateScore(Bitmap* state) {
 	float b = 0.760666;
 	float c = -0.35663;
 	float d = -0.184483;
-	
+
 	float score = 0;
-	
+
 	score += a * aggregateHeight(state);
 	score += b * completedLines(state);
 	score += c * numberOfHoles(state);
 	score += d * bumpValue(state);
-	
+
 	return score;
 }
 
