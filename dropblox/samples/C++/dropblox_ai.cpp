@@ -1,4 +1,5 @@
 #include "dropblox_ai.h"
+#include <stdlib.h>
 
 using namespace json;
 using namespace std;
@@ -281,12 +282,49 @@ int aggregateHeight(Bitmap* state){
 }
 
 int completedLines(Bitmap* state){
+	int completedLines = 0;
+	
+	for (int row = 0; row < ROWS; row++) {
+		bool complete = true;
+		
+		for (int col = 0; col < COLS; col++) {
+			if ((*state)[row][col] == 0) {
+				complete = false;
+				break;
+			}
+		}
+		
+		if (complete) completedLines++;
+	}
+	
+	return completedLines;
 }
 
 int numberOfHoles(Bitmap* state){
 }
 
-int bumpValue(Bitmap* state){
+int columnHeight(Bitmap* state, int col) {
+	int height = 0;
+	
+	for (int row = ROWS; row >= 0; row--) {
+		if ((*state)[row][col] != 0) {
+			height++;
+		} else {
+			break;
+		}
+	}
+	
+	return height;
+}
+
+int bumpValue(Bitmap* state) {
+	int bumpSum = 0;
+	
+	for (int col = 0; col < COLS - 1; col++) {
+		bumpSum += abs(columnHeight(state, col) - columnHeight(state, col + 1));
+	}
+	
+	return bumpSum;
 }
 
 int main(int argc, char** argv) {
