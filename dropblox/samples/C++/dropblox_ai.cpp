@@ -280,7 +280,7 @@ void Board::remove_rows(Bitmap* new_bitmap) {
 
 vector<string>& convertCommands(Point& translation, int rotation){
     vector<string> commands;
-    for (int i = 0 ; i < rotate ; ++i){
+    for (int i = 0 ; i < rotation ; ++i){
         commands.push_back("rotate");
     }
     for (int i = 0; i < translation.i ; ++i){
@@ -392,9 +392,9 @@ float calculateScore(Bitmap* state, Block* block) {
 
 		new_bitmap[point.i][point.j] = 1;
 	}
-	
+
 	// Calculate score
-	
+
 	float a = -0.510066;
 	float b = 0.760666;
 	float c = -0.35663;
