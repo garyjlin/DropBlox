@@ -353,23 +353,8 @@ int bumpValue(Bitmap* state) {
 	return bumpSum;
 }
 
-float calculateScore(Bitmap* state) {
-	float a = -0.510066;
-	float b = 0.760666;
-	float c = -0.35663;
-	float d = -0.184483;
-
-	float score = 0;
-
-	score += a * aggregateHeight(state);
-	score += b * completedLines(state);
-	score += c * numberOfHoles(state);
-	score += d * bumpValue(state);
-
-	return score;
-}
-
-Bitmap flattenBoard(Bitmap* state, Block* block) {
+float calculateScore(Bitmap* state, Block* block) {
+	// Combine bitmap with block
 	Bitmap new_bitmap;
 	
 	for (int i = 0; i < ROWS; i++) {
@@ -394,7 +379,21 @@ Bitmap flattenBoard(Bitmap* state, Block* block) {
 		new_bitmap[point.i][point.j] = 1;
 	}
 	
-	return new_bitmap;
+	// Calculate score
+	
+	float a = -0.510066;
+	float b = 0.760666;
+	float c = -0.35663;
+	float d = -0.184483;
+
+	float score = 0;
+
+	score += a * aggregateHeight(&new_bitmap);
+	score += b * completedLines(&new_bitmap);
+	score += c * numberOfHoles(&new_bitmap);
+	score += d * bumpValue(&new_bitmap);
+
+	return score;
 }
 
 int main(int argc, char** argv) {
